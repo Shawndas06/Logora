@@ -15,15 +15,17 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Копирование файлов проекта
+# Сначала копируем только CMakeLists.txt для кэширования
 COPY backend/CMakeLists.txt /app/backend/
+
+# Затем копируем остальные файлы
 COPY backend/src /app/backend/src
 COPY backend/include /app/backend/include
 
 # Сборка C++ сервера
 WORKDIR /app/backend
 RUN mkdir -p build && cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr .. && \
+    cmake -DCMAKE_BUILD_TYPE=Release .. && \
     make VERBOSE=1 && \
     ls -la bin/
 
