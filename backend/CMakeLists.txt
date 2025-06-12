@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.10)
-project(logora_server VERSION 1.0.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.12)
+project(logora_server LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -8,20 +8,24 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Настройка путей вывода
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Поиск зависимостей
-find_package(OpenSSL REQUIRED)
+# Поиск обязательных зависимостей
+find_package(OpenSSL 1.1.1 REQUIRED)
 find_package(SQLite3 REQUIRED)
-find_package(cpprestsdk REQUIRED)
-find_package(Threads REQUIRED)
+find_package(cpprestsdk 2.10 REQUIRED)
+find_package(Boost 1.71 REQUIRED COMPONENTS system filesystem)
 
-# Исходные файлы
+# Проверка версий
+message(STATUS "OpenSSL version: ${OPENSSL_VERSION}")
+message(STATUS "Boost version: ${Boost_VERSION}")
+
+# Исходные файлы (проверьте пути!)
 set(SOURCES
-    src/main.cpp
-    src/account.cpp
-    src/charge.cpp
-    src/payments.cpp
-    src/db.cpp
-    src/api.cpp
+    src/cpp/main.cpp
+    src/cpp/account.cpp
+    src/cpp/charge.cpp
+    src/cpp/payments.cpp
+    src/cpp/db.cpp
+    src/cpp/api.cpp
 )
 
 # Основной сервер
@@ -36,68 +40,10 @@ target_link_libraries(logora_server PRIVATE
     cpprestsdk::cpprest
     OpenSSL::SSL
     OpenSSL::Crypto
-    Threads::Threads
-)
-
-# Тесты (опционально)
-option(BUILD_TESTS "Build tests" OFF)
-
-if(BUILD_TESTS)
-    find_package(Catch2 REQUIRED)
-    
-    set(TEST_SOURCES
-        tests/test_account.cpp
-        tests/test_charge.cpp
-        tests/test_payment.cpp
-    )
-    
-    add_executable(tests ${TEST_SOURCES})
-    target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
-    
-    include(CTest)
-    include(Catch)
-    catch_discover_tests(tests)
-endif()
-
-message(STATUS "Found OpenSSL version: ${OPENSSL_VERSION}")
-
-# Добавление исходных файлов
-set(SOURCES
-    src/main.cpp
-    src/accounts.cpp
-    src/charges.cpp
-    src/payments.cpp
-)
-
-# Добавление заголовочных файлов
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${SQLite3_INCLUDE_DIRS}
-    ${OPENSSL_INCLUDE_DIR}
-)
-
-# Создание исполняемого файла
-add_executable(logora_server ${SOURCES})
-
-# Установка выходной директории
-set_target_properties(logora_server PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin"
-    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/bin"
-)
-
-# Линковка библиотек
-target_link_libraries(logora_server
-    ${SQLite3_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
+    Boost::system
+    Boost::filesystem
     pthread
 )
 
-# Установка заголовочных файлов
-install(DIRECTORY include/
-        DESTINATION include/logora
-        FILES_MATCHING PATTERN "*.h")
-
-# Установка исполняемого файла
-install(TARGETS logora_server
-        RUNTIME DESTINATION bin) 
+# Установка бинарника
+install(TARGETS logora_server DESTINATION bin)

@@ -1,8 +1,8 @@
-#include "db.h"
-#include "account.h"
-#include "charge.h"
-#include "payments.h"
-#include "api.h"
+#include "../include/db.h"
+#include "../include/account.h"
+#include "../include/charge.h"
+#include "../include/payments.h"
+#include "../include/api.h"
 #include <iostream>
 
 int main() {

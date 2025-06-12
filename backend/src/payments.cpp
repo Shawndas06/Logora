@@ -1,4 +1,4 @@
-#include "payments.h"
+#include "../include/payments.h"
 #include <iostream>
 #include <ctime>
 
