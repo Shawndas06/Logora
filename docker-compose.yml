@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # C++ бэкенд
+  cpp-backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.cpp
+    ports:
+      - "5000:8080"
+    volumes:
+      - ./backend/src:/app/backend/src:ro
+      - ./backend/include:/app/backend/include:ro
+      - ./db:/app/db:rw
+    environment:
+      - DATABASE_URL=sqlite:///db/logora.sqlite
+      - DB_PATH=/app/db/logora.sqlite
+      - NODE_ENV=production
+    command: ["./build/bin/logora_server", "--host", "0.0.0.0", "--port", "8080"]
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # Python приложение
+  python-app:
+    build:
+      context: .
+      dockerfile: python/Dockerfile.python
+    ports:
+      - "3000:8000"
+    volumes:
+      - ./python:/app/python:ro
+      - ./db:/app/db:rw
+      - ./python/receipts:/app/python/receipts:rw
+      - ./python/qrcodes:/app/python/qrcodes:rw
+      - ./python/logs:/app/python/logs:rw
+    environment:
+      - DATABASE_URL=sqlite:///db/logora.sqlite
+      - BACKEND_URL=http://cpp-backend:8080
+      - NODE_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key}
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-your-email@gmail.com}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-your-password}
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      cpp-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  frontend:
+  backend:

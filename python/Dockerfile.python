@@ -1,0 +1,53 @@
+# Используем Python 3.9
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Установка необходимых пакетов
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libsqlite3-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копирование файлов проекта
+COPY python /app/python
+COPY db /app/db
+
+WORKDIR /app/python
+
+# Установка зависимостей Python
+RUN pip install --no-cache-dir -r requirements.txt && \
+    pip check
+
+# Создание необходимых директорий
+RUN mkdir -p /app/db && \
+    mkdir -p /app/python/receipts && \
+    mkdir -p /app/python/qrcodes && \
+    mkdir -p /app/python/logs && \
+    chmod -R 777 /app/db && \
+    chmod -R 777 /app/python/receipts && \
+    chmod -R 777 /app/python/qrcodes && \
+    chmod -R 777 /app/python/logs
+
+# Установка переменных окружения
+ENV PYTHONPATH=/app
+ENV DATABASE_URL=sqlite:///db/logora.sqlite
+ENV LOG_LEVEL=INFO
+ENV LOG_FILE=/app/python/logs/app.log
+
+# Открытие порта
+EXPOSE 8000
+
+# Проверка здоровья
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Запуск приложения
+WORKDIR /app
+
+# Создаем скрипт запуска
+RUN echo '#!/bin/bash\npython /app/python/init_db.py\npython -m uvicorn python.app:app --host 0.0.0.0 --port 8000 --reload' > /app/start.sh && \
+    chmod +x /app/start.sh
+
+CMD ["/app/start.sh"] 
