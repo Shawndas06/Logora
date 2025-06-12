@@ -1,6 +1,6 @@
 FROM python:3.11-slim AS base
 
-# Установка зависимостей с доступными версиями пакетов
+# Установка зависимостей
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
@@ -9,14 +9,10 @@ RUN apt-get update && apt-get install -y \
     libcpprest2.10 \
     libboost-system-dev \
     libboost-filesystem-dev \
-    g++-10 \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# Настройка альтернативных версий компилятора
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
-    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
-
+# Удаляем настройку альтернативных версий компилятора (так как используем версию по умолчанию)
 WORKDIR /app
 
 # Копирование только необходимых файлов
