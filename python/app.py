@@ -1,9 +1,11 @@
 import os
-from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask import Flask, render_template, redirect, url_for, request, session, flash, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from forms import LoginForm, RegisterForm
 from flask_wtf import CSRFProtect
+from pdf_generator import create_receipt
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)  # Secure random key
@@ -83,7 +85,7 @@ def team():
         flash('Сначала войдите в систему', 'error')
         return redirect(url_for('login'))
     conn = get_db_connection()
-    users = conn.execute('SELECT id, username FROM users').fetchall()
+    users = conn.execute('SELECT id, username, full_name, email FROM users').fetchall()
     conn.close()
     return render_template('team.html', users=users)
 
@@ -92,26 +94,110 @@ def profile():
     if 'user_id' not in session:
         flash('Сначала войдите в систему', 'error')
         return redirect(url_for('login'))
+    
     conn = get_db_connection()
     user = conn.execute('SELECT * FROM users WHERE id = ?', (session['user_id'],)).fetchone()
+    
+    # Get user's accounts
+    accounts = conn.execute('''
+        SELECT * FROM accounts 
+        WHERE user_id = ?
+    ''', (session['user_id'],)).fetchall()
+    
+    # Get charges and payments for each account
+    accounts_data = []
+    for account in accounts:
+        charges = conn.execute('''
+            SELECT * FROM charges 
+            WHERE account_id = ? 
+            ORDER BY start_date DESC
+        ''', (account['id'],)).fetchall()
+        
+        payments = conn.execute('''
+            SELECT * FROM payments 
+            WHERE account_id = ? 
+            ORDER BY date DESC
+        ''', (account['id'],)).fetchall()
+        
+        accounts_data.append({
+            'account': account,
+            'charges': charges,
+            'payments': payments
+        })
+    
     conn.close()
+    
     if user is None:
         flash('Пользователь не найден', 'error')
         return redirect(url_for('login'))
-    # Mock data for profile template
-    user_dict = {
-        'full_name': user['username'],
-        'email': f"{user['username']}@example.com"
-    }
-    accounts = [
-        {'number': '12345', 'address': 'ул. Примерная, д. 1', 'area': 50, 'residents': 2, 'management_company': 'УК Пример'},
-        {'number': '67890', 'address': 'ул. Тестовая, д. 2', 'area': 75, 'residents': 4, 'management_company': 'УК Тест'}
-    ]
-    payments = [
-        {'period': 'Октябрь 2025', 'amount': 5000},
-        {'period': 'Ноябрь 2025', 'amount': 5500}
-    ]
-    return render_template('profile.html', full_name=user_dict['full_name'], email=user_dict['email'], accounts=accounts, payments=payments)
+    
+    return render_template('profile.html', 
+                         user=user,
+                         accounts_data=accounts_data)
+
+@app.route('/generate_receipt/<int:account_id>')
+def generate_receipt(account_id):
+    if 'user_id' not in session:
+        flash('Сначала войдите в систему', 'error')
+        return redirect(url_for('login'))
+    
+    try:
+        receipt_path, qr_path = create_receipt(account_id)
+        return send_file(receipt_path, as_attachment=True, download_name=f'receipt_{account_id}.pdf')
+    except Exception as e:
+        flash(f'Ошибка при генерации квитанции: {str(e)}', 'error')
+        return redirect(url_for('profile'))
+
+@app.route('/api/accounts', methods=['GET'])
+def get_accounts():
+    if 'user_id' not in session:
+        return {'error': 'Unauthorized'}, 401
+    
+    conn = get_db_connection()
+    accounts = conn.execute('''
+        SELECT a.*, 
+               (SELECT SUM(amount) FROM charges WHERE account_id = a.id) as total_charges,
+               (SELECT SUM(amount) FROM payments WHERE account_id = a.id) as total_payments
+        FROM accounts a
+        WHERE user_id = ?
+    ''', (session['user_id'],)).fetchall()
+    conn.close()
+    
+    return {'accounts': [dict(account) for account in accounts]}
+
+@app.route('/api/charges/<int:account_id>', methods=['GET'])
+def get_charges(account_id):
+    if 'user_id' not in session:
+        return {'error': 'Unauthorized'}, 401
+    
+    conn = get_db_connection()
+    charges = conn.execute('''
+        SELECT c.* 
+        FROM charges c
+        JOIN accounts a ON c.account_id = a.id
+        WHERE a.user_id = ? AND c.account_id = ?
+        ORDER BY c.start_date DESC
+    ''', (session['user_id'], account_id)).fetchall()
+    conn.close()
+    
+    return {'charges': [dict(charge) for charge in charges]}
+
+@app.route('/api/payments/<int:account_id>', methods=['GET'])
+def get_payments(account_id):
+    if 'user_id' not in session:
+        return {'error': 'Unauthorized'}, 401
+    
+    conn = get_db_connection()
+    payments = conn.execute('''
+        SELECT p.* 
+        FROM payments p
+        JOIN accounts a ON p.account_id = a.id
+        WHERE a.user_id = ? AND p.account_id = ?
+        ORDER BY p.date DESC
+    ''', (session['user_id'], account_id)).fetchall()
+    conn.close()
+    
+    return {'payments': [dict(payment) for payment in payments]}
 
 if __name__ == '__main__':
     app.run(debug=True)

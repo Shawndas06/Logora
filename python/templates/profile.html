@@ -3,144 +3,94 @@
 {% block title %}Личный кабинет - Smart ЖКХ{% endblock %}
 
 {% block content %}
-<div class="profile-container">
-    <div class="profile-header fade-in">
-        <div class="profile-info">
-            <div class="profile-avatar">
-                <i class="fas fa-user-circle"></i>
-            </div>
-            <div class="profile-details">
-                <h1>{{ user.email }}</h1>
-                <p class="profile-status">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Email подтвержден</span>
-                </p>
-            </div>
-        </div>
-        <div class="profile-actions">
-            <button class="btn btn-secondary" onclick="showChangePasswordModal()">
-                <i class="fas fa-key"></i>
-                Изменить пароль
-            </button>
-            <button class="btn btn-outline" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-                Выйти
-            </button>
+<div class="container mt-4">
+    <h1>Профиль пользователя</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Личная информация</h5>
+            <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+            <p><strong>Полное имя:</strong> {{ user.full_name or 'Не указано' }}</p>
+            <p><strong>Email:</strong> {{ user.email or 'Не указан' }}</p>
         </div>
     </div>
 
-    <div class="services-grid">
-        <div class="service-card water-card fade-in" data-sound="water">
-            <div class="service-icon">
-                <i class="fas fa-tint"></i>
-            </div>
-            <div class="service-info">
-                <h3>Водоснабжение</h3>
-                <div class="service-details">
-                    <div class="detail-item">
-                        <span class="label">Текущий счетчик:</span>
-                        <span class="value">123 м³</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Последняя оплата:</span>
-                        <span class="value">1,500 ₽</span>
-                    </div>
-                </div>
-                <button class="btn btn-primary service-btn">
-                    <i class="fas fa-file-invoice"></i>
-                    Оплатить
-                </button>
-            </div>
+    <h2>Мои лицевые счета</h2>
+    {% for account_data in accounts_data %}
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Лицевой счет: {{ account_data.account.number }}</h5>
+            <a href="{{ url_for('generate_receipt', account_id=account_data.account.id) }}" class="btn btn-primary">
+                Скачать квитанцию
+            </a>
         </div>
+        <div class="card-body">
+            <h6>Информация о счете:</h6>
+            <p><strong>Адрес:</strong> {{ account_data.account.address }}</p>
+            <p><strong>Площадь:</strong> {{ account_data.account.area }} м²</p>
+            <p><strong>Количество проживающих:</strong> {{ account_data.account.residents }}</p>
+            <p><strong>Управляющая компания:</strong> {{ account_data.account.management_company }}</p>
 
-        <div class="service-card electricity-card fade-in" data-sound="electricity">
-            <div class="service-icon">
-                <i class="fas fa-bolt"></i>
+            <h6 class="mt-4">Последние начисления:</h6>
+            {% if account_data.charges %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Услуга</th>
+                            <th>Период</th>
+                            <th>Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for charge in account_data.charges %}
+                        <tr>
+                            <td>{{ charge.service }}</td>
+                            <td>{{ charge.start_date }} - {{ charge.end_date }}</td>
+                            <td>{{ charge.amount }} ₽</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="service-info">
-                <h3>Электричество</h3>
-                <div class="service-details">
-                    <div class="detail-item">
-                        <span class="label">Текущий счетчик:</span>
-                        <span class="value">456 кВт⋅ч</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Последняя оплата:</span>
-                        <span class="value">2,300 ₽</span>
-                    </div>
-                </div>
-                <button class="btn btn-primary service-btn">
-                    <i class="fas fa-file-invoice"></i>
-                    Оплатить
-                </button>
-            </div>
-        </div>
+            {% else %}
+            <p>Нет данных о начислениях</p>
+            {% endif %}
 
-        <div class="service-card gas-card fade-in" data-sound="gas">
-            <div class="service-icon">
-                <i class="fas fa-fire"></i>
+            <h6 class="mt-4">Последние платежи:</h6>
+            {% if account_data.payments %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Сумма</th>
+                            <th>Способ оплаты</th>
+                            <th>Номер чека</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in account_data.payments %}
+                        <tr>
+                            <td>{{ payment.date }}</td>
+                            <td>{{ payment.amount }} ₽</td>
+                            <td>{{ payment.method }}</td>
+                            <td>{{ payment.receipt }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="service-info">
-                <h3>Газоснабжение</h3>
-                <div class="service-details">
-                    <div class="detail-item">
-                        <span class="label">Текущий счетчик:</span>
-                        <span class="value">89 м³</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Последняя оплата:</span>
-                        <span class="value">950 ₽</span>
-                    </div>
-                </div>
-                <button class="btn btn-primary service-btn">
-                    <i class="fas fa-file-invoice"></i>
-                    Оплатить
-                </button>
-            </div>
+            {% else %}
+            <p>Нет данных о платежах</p>
+            {% endif %}
         </div>
     </div>
-
-    <div class="recent-activity fade-in">
-        <h2>Последние операции</h2>
-        <div class="activity-list">
-            <div class="activity-item">
-                <div class="activity-icon water">
-                    <i class="fas fa-tint"></i>
-                </div>
-                <div class="activity-details">
-                    <h4>Оплата водоснабжения</h4>
-                    <p>1,500 ₽ • 15.03.2024</p>
-                </div>
-                <div class="activity-status success">
-                    <i class="fas fa-check"></i>
-                </div>
-            </div>
-            <div class="activity-item">
-                <div class="activity-icon electricity">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <div class="activity-details">
-                    <h4>Оплата электричества</h4>
-                    <p>2,300 ₽ • 14.03.2024</p>
-                </div>
-                <div class="activity-status success">
-                    <i class="fas fa-check"></i>
-                </div>
-            </div>
-            <div class="activity-item">
-                <div class="activity-icon gas">
-                    <i class="fas fa-fire"></i>
-                </div>
-                <div class="activity-details">
-                    <h4>Оплата газоснабжения</h4>
-                    <p>950 ₽ • 13.03.2024</p>
-                </div>
-                <div class="activity-status success">
-                    <i class="fas fa-check"></i>
-                </div>
-            </div>
-        </div>
+    {% else %}
+    <div class="alert alert-info">
+        У вас пока нет лицевых счетов
     </div>
+    {% endfor %}
 </div>
 
 <div class="profile-decoration">
