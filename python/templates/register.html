@@ -1,0 +1,434 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация - Smart ЖКХ{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <h1 class="fade-in">Создание аккаунта</h1>
+            <p class="fade-in">Присоединяйтесь к Smart ЖКХ для удобного управления коммунальными услугами</p>
+        </div>
+
+        <form id="registerForm" class="register-form" onsubmit="return handleRegister(event)">
+            <div class="form-group fade-in">
+                <label for="email">Email</label>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="error-message" id="emailError"></div>
+            </div>
+
+            <div class="form-group fade-in">
+                <label for="password">Пароль</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" required>
+                    <i class="fas fa-eye toggle-password"></i>
+                </div>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+
+            <div class="form-group fade-in">
+                <label for="confirmPassword">Подтвердите пароль</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <i class="fas fa-eye toggle-password"></i>
+                </div>
+                <div class="error-message" id="confirmPasswordError"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-register fade-in">
+                <span>Зарегистрироваться</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <div class="register-footer fade-in">
+            <p>Уже есть аккаунт? <a href="{{ url_for('login') }}" class="link-animated">Войти</a></p>
+            <div class="social-contacts">
+                <div class="contacts-block">
+                    <span><i class="fas fa-phone"></i> <a href="tel:+79991234567">+7 (999) 123-45-67</a></span>
+                    <span><i class="fas fa-envelope"></i> <a href="mailto:info@smartgkh.ru">info@smartgkh.ru</a></span>
+                </div>
+                <div class="social-block">
+                    <a href="https://vk.com/" target="_blank" class="social-icon vk" title="VK"><i class="fab fa-vk"></i></a>
+                    <a href="https://t.me/" target="_blank" class="social-icon tg" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="https://youtube.com/" target="_blank" class="social-icon yt" title="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="register-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.register-container {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+}
+
+.register-card {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.register-header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.register-header p {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    position: relative;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group i {
+    position: absolute;
+    left: 1rem;
+    color: #666;
+    transition: var(--transition);
+}
+
+.input-group .toggle-password {
+    left: auto;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1rem 3rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.input-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+}
+
+.input-group input:focus + i {
+    color: var(--primary-color);
+}
+
+.btn-register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+}
+
+.btn-register i {
+    transition: transform 0.3s ease;
+}
+
+.btn-register:hover i {
+    transform: translateX(5px);
+}
+
+.register-footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: #666;
+}
+
+.link-animated {
+    color: var(--primary-color);
+    text-decoration: none;
+    position: relative;
+    font-weight: 500;
+}
+
+.link-animated::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-color);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.link-animated:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.register-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.decoration-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    opacity: 0.1;
+    animation: float 6s ease-in-out infinite;
+}
+
+.circle-1 {
+    width: 300px;
+    height: 300px;
+    top: -150px;
+    right: -150px;
+    animation-delay: 0s;
+}
+
+.circle-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -100px;
+    left: -100px;
+    animation-delay: 2s;
+}
+
+.circle-3 {
+    width: 150px;
+    height: 150px;
+    top: 50%;
+    right: 10%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.fade-in:nth-child(2) { animation-delay: 0.2s; }
+.fade-in:nth-child(3) { animation-delay: 0.4s; }
+.fade-in:nth-child(4) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .register-card {
+        padding: 2rem;
+    }
+
+    .register-header h1 {
+        font-size: 2rem;
+    }
+
+    .decoration-circle {
+        display: none;
+    }
+}
+
+.social-contacts {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    animation: fadeInUp 1.2s 0.7s both;
+}
+.contacts-block span {
+    display: block;
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+    transition: color 0.2s;
+}
+.contacts-block a {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-left: 0.3rem;
+}
+.social-block {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 0.5rem;
+}
+.social-icon {
+    font-size: 1.7rem;
+    color: var(--primary-color);
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(33,150,243,0.08);
+    padding: 0.4rem 0.5rem;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.social-icon:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: scale(1.12) rotate(-8deg);
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Обработка переключения видимости пароля
+    document.querySelectorAll('.toggle-password').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+
+    // Анимация при фокусе на поле ввода
+    document.querySelectorAll('.input-group input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.parentElement.classList.remove('focused');
+            }
+        });
+    });
+});
+
+async function handleRegister(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // Валидация паролей
+    if (data.password !== data.confirmPassword) {
+        showError('confirmPassword', 'Пароли не совпадают');
+        return false;
+    }
+
+    try {
+        const response = await fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            showNotification('Регистрация успешна! Перенаправление...', 'success');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000);
+        } else {
+            const error = await response.json();
+            showNotification(error.detail || 'Ошибка при регистрации', 'error');
+        }
+    } catch (error) {
+        showNotification('Ошибка при отправке формы', 'error');
+    }
+
+    return false;
+}
+
+function showError(fieldId, message) {
+    const errorElement = document.getElementById(`${fieldId}Error`);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+}
+
+function clearError(fieldId) {
+    const errorElement = document.getElementById(`${fieldId}Error`);
+    if (errorElement) {
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}
