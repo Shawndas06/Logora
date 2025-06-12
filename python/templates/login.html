@@ -1,469 +1,115 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart ЖКХ - Вход в систему</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Smart ЖКХ</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Главная</a></li>
+                <li><a href="{{ url_for('register') }}">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
 
-{% block title %}Вход - Smart ЖКХ{% endblock %}
-
-{% block content %}
-<div class="login-container">
-    <div class="login-card">
-        <div class="login-header">
-            <h1 class="fade-in">Добро пожаловать</h1>
-            <p class="fade-in">Войдите в свой аккаунт для управления коммунальными услугами</p>
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
         </div>
-
-        <form id="loginForm" class="login-form" onsubmit="return handleLogin(event)">
-            <div class="form-group fade-in">
-                <label for="email">Email</label>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" name="username" required>
+        {% endif %}
+        {% endwith %}
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-header">
+                    <h1>Вход в систему</h1>
+                    <p>Войдите, чтобы управлять вашими коммунальными услугами</p>
                 </div>
-                <div class="error-message" id="emailError"></div>
-            </div>
-
-            <div class="form-group fade-in">
-                <label for="password">Пароль</label>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password" name="password" required>
-                    <i class="fas fa-eye toggle-password"></i>
+                <form class="login-form" action="{{ url_for('login') }}" method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        <label for="username">Имя пользователя</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            {{ form.username(id="username", placeholder="Введите имя пользователя", required=True) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            {{ form.password(id="password", placeholder="Введите ваш пароль", required=True) }}
+                            <span class="password-toggle" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="remember-forgot">
+                        <div class="remember">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Запомнить меня</label>
+                        </div>
+                        <a href="#" class="forgot-password">Забыли пароль?</a>
+                    </div>
+                    {{ form.submit(class="btn-login") }}
+                </form>
+                <div class="social-login">
+                    <p>Или войдите с помощью</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon google">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="#" class="social-icon facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon vk">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="error-message" id="passwordError"></div>
-            </div>
-
-            <div class="form-options fade-in">
-                <label class="remember-me">
-                    <input type="checkbox" id="rememberMe" name="rememberMe">
-                    <span>Запомнить меня</span>
-                </label>
-                <a href="#" class="forgot-password" onclick="showForgotPasswordModal()">Забыли пароль?</a>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-login fade-in">
-                <span>Войти</span>
-                <i class="fas fa-sign-in-alt"></i>
-            </button>
-        </form>
-
-        <div class="login-footer fade-in">
-            <p>Нет аккаунта? <a href="/register" class="link-animated">Зарегистрироваться</a></p>
-            <div class="social-contacts">
-                <div class="contacts-block">
-                    <span><i class="fas fa-phone"></i> <a href="tel:+79991234567">+7 (999) 123-45-67</a></span>
-                    <span><i class="fas fa-envelope"></i> <a href="mailto:info@smartgkh.ru">info@smartgkh.ru</a></span>
-                </div>
-                <div class="social-block">
-                    <a href="https://vk.com/" target="_blank" class="social-icon vk" title="VK"><i class="fab fa-vk"></i></a>
-                    <a href="https://t.me/" target="_blank" class="social-icon tg" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
-                    <a href="https://youtube.com/" target="_blank" class="social-icon yt" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <div class="register-link">
+                    Ещё нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div class="login-decoration">
-        <div class="decoration-circle circle-1"></div>
-        <div class="decoration-circle circle-2"></div>
-        <div class="decoration-circle circle-3"></div>
-    </div>
-</div>
-
-<!-- Модальное окно восстановления пароля -->
-<div id="forgotPasswordModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Восстановление пароля</h2>
-            <button class="close-modal" onclick="closeForgotPasswordModal()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <form id="forgotPasswordForm" onsubmit="return handleForgotPassword(event)">
-            <div class="form-group">
-                <label for="resetEmail">Email</label>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="resetEmail" name="email" required>
-                </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Smart ЖКХ</h4>
+                <p>Современное решение для управления коммунальными услугами</p>
             </div>
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-paper-plane"></i>
-                Отправить инструкции
-            </button>
-        </form>
-    </div>
-</div>
-{% endblock %}
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <p>Email: info@smart-zhkh.ru</p>
+                <p>Телефон: 8-800-123-45-67</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Smart ЖКХ. Все права защищены.</p>
+        </div>
+    </footer>
 
-{% block extra_css %}
-<style>
-.login-container {
-    min-height: calc(100vh - 80px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-}
-
-.login-card {
-    background: var(--white);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    padding: 3rem;
-    width: 100%;
-    max-width: 500px;
-    position: relative;
-    z-index: 1;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.login-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-}
-
-.login-header h1 {
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
-}
-
-.login-header p {
-    color: #666;
-    font-size: 1.1rem;
-    line-height: 1.6;
-}
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.form-group {
-    position: relative;
-}
-
-.input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.input-group i {
-    position: absolute;
-    left: 1rem;
-    color: #666;
-    transition: var(--transition);
-}
-
-.input-group .toggle-password {
-    left: auto;
-    right: 1rem;
-    cursor: pointer;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 1rem 3rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: var(--transition);
-    background: rgba(255, 255, 255, 0.9);
-}
-
-.input-group input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
-}
-
-.input-group input:focus + i {
-    color: var(--primary-color);
-}
-
-.btn-login {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    font-size: 1.1rem;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-login:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
-}
-
-.btn-login i {
-    transition: transform 0.3s ease;
-}
-
-.btn-login:hover i {
-    transform: translateX(5px);
-}
-
-.login-footer {
-    text-align: center;
-    margin-top: 2rem;
-    color: #666;
-}
-
-.link-animated {
-    color: var(--primary-color);
-    text-decoration: none;
-    position: relative;
-    font-weight: 500;
-}
-
-.link-animated::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--primary-color);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s ease;
-}
-
-.link-animated:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-
-.login-decoration {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-}
-
-.decoration-circle {
-    position: absolute;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    opacity: 0.1;
-    animation: float 6s ease-in-out infinite;
-}
-
-.circle-1 {
-    width: 300px;
-    height: 300px;
-    top: -150px;
-    right: -150px;
-    animation-delay: 0s;
-}
-
-.circle-2 {
-    width: 200px;
-    height: 200px;
-    bottom: -100px;
-    left: -100px;
-    animation-delay: 2s;
-}
-
-.circle-3 {
-    width: 150px;
-    height: 150px;
-    top: 50%;
-    right: 10%;
-    animation-delay: 4s;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(5deg); }
-}
-
-.fade-in {
-    opacity: 0;
-    animation: fadeInUp 0.5s ease forwards;
-}
-
-.fade-in:nth-child(2) { animation-delay: 0.2s; }
-.fade-in:nth-child(3) { animation-delay: 0.4s; }
-.fade-in:nth-child(4) { animation-delay: 0.6s; }
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .login-card {
-        padding: 2rem;
-    }
-
-    .login-header h1 {
-        font-size: 2rem;
-    }
-
-    .decoration-circle {
-        display: none;
-    }
-}
-
-.form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.remember-me {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-.remember-me input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-}
-
-.forgot-password {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-}
-
-.forgot-password:hover {
-    color: var(--secondary-color);
-    text-decoration: underline;
-}
-
-/* Стили для модального окна */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background: var(--white);
-    border-radius: 20px;
-    padding: 2rem;
-    width: 100%;
-    max-width: 500px;
-    position: relative;
-    animation: modalFadeIn 0.3s ease;
-}
-
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-
-.modal-header h2 {
-    font-size: 1.5rem;
-    color: var(--text-color);
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #666;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close-modal:hover {
-    color: var(--text-color);
-}
-
-.social-contacts {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.7rem;
-    animation: fadeInUp 1.2s 0.7s both;
-}
-.contacts-block span {
-    display: block;
-    color: #555;
-    font-size: 1rem;
-    margin-bottom: 0.2rem;
-    transition: color 0.2s;
-}
-.contacts-block a {
-    color: var(--primary-color);
-    text-decoration: none;
-    margin-left: 0.3rem;
-}
-.social-block {
-    display: flex;
-    gap: 1.2rem;
-    margin-top: 0.5rem;
-}
-.social-icon {
-    font-size: 1.7rem;
-    color: var(--primary-color);
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(33,150,243,0.08);
-    padding: 0.4rem 0.5rem;
-    transition: background 0.2s, color 0.2s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.social-icon:hover {
-    background: var(--primary-color);
-    color: #fff;
-    transform: scale(1.12) rotate(-8deg);
-}
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-</style>
-{% endblock %}
-
-{% block extra_js %}
-<script src="/static/js/auth.js"></script>
-{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordToggle = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        });
+    </script>
+</body>
+</html>

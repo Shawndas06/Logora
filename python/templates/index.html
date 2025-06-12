@@ -1,373 +1,115 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart ЖКХ - Главная</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Smart ЖКХ</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}" class="active">Главная</a></li>
+                {% if username %}
+                <li><a href="{{ url_for('profile') }}">Профиль</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+                {% else %}
+                <li><a href="{{ url_for('register') }}">Регистрация</a></li>
+                <li><a href="{{ url_for('login') }}">Войти в систему</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
 
-{% block title %}Главная - Smart ЖКХ{% endblock %}
-
-{% block content %}
-<div class="hero-section">
-    <div class="hero-content">
-        <h1 class="fade-in">Умное управление ЖКХ</h1>
-        <p class="fade-in">Контролируйте свои коммунальные платежи легко и удобно</p>
-        <div class="hero-buttons fade-in">
-            <a href="/register" class="btn btn-primary pulse">Начать сейчас</a>
-            <a href="/articles" class="btn btn-secondary">Узнать больше</a>
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
         </div>
-    </div>
-    <div class="hero-decoration">
-        <div class="floating-icon water-icon" data-sound="water">
-            <i class="fas fa-tint"></i>
-            <audio id="water-sound" src="{{ url_for('static', path='sounds/water.mp3') }}" preload="auto"></audio>
-        </div>
-        <div class="floating-icon electricity-icon" data-sound="electricity">
-            <i class="fas fa-bolt"></i>
-            <audio id="electricity-sound" src="{{ url_for('static', path='sounds/electricity.mp3') }}" preload="auto"></audio>
-        </div>
-        <div class="floating-icon gas-icon" data-sound="gas">
-            <i class="fas fa-fire"></i>
-            <audio id="gas-sound" src="{{ url_for('static', path='sounds/gas.mp3') }}" preload="auto"></audio>
-        </div>
-    </div>
-</div>
-
-<div class="features-section">
-    <h2 class="section-title">Наши услуги</h2>
-    <div class="features-grid">
-        <div class="feature-card" data-sound="water">
-            <div class="feature-icon water-icon">
-                <i class="fas fa-tint"></i>
+        {% endif %}
+        {% endwith %}
+        <section class="hero">
+            <h1>Умное управление ЖКХ</h1>
+            <p>Удобный способ оплаты коммунальных услуг и управления лицевыми счетами</p>
+            <div class="hero-icons">
+                <i class="fas fa-tint water-icon"></i>
+                <i class="fas fa-bolt electricity-icon"></i>
+                <i class="fas fa-fire fire-icon"></i>
+                <a href="{{ url_for('team') }}" class="team-icon">
+                    <i class="fas fa-users"></i>
+                </a>
             </div>
-            <h3>Водоснабжение</h3>
-            <p>Контроль расхода воды и оплата счетов</p>
-            <div class="feature-hover">
-                <span class="hover-text">Нажмите для подробностей</span>
-            </div>
-        </div>
-        <div class="feature-card" data-sound="electricity">
-            <div class="feature-icon electricity-icon">
-                <i class="fas fa-bolt"></i>
-            </div>
-            <h3>Электричество</h3>
-            <p>Мониторинг потребления электроэнергии</p>
-            <div class="feature-hover">
-                <span class="hover-text">Нажмите для подробностей</span>
-            </div>
-        </div>
-        <div class="feature-card" data-sound="gas">
-            <div class="feature-icon gas-icon">
-                <i class="fas fa-fire"></i>
-            </div>
-            <h3>Газоснабжение</h3>
-            <p>Учет и оплата газовых услуг</p>
-            <div class="feature-hover">
-                <span class="hover-text">Нажмите для подробностей</span>
-            </div>
-        </div>
-    </div>
-</div>
+        </section>
 
-<div class="accounts-section">
-    <h2 class="section-title">Ваши лицевые счета</h2>
-    <div id="accountsList" class="accounts-grid">
-        <!-- Счета будут добавлены через JavaScript -->
-    </div>
-</div>
-
-<div class="cta-section">
-    <div class="cta-content">
-        <h2>Готовы начать?</h2>
-        <p>Присоединяйтесь к тысячам пользователей, которые уже экономят на коммунальных услугах</p>
-        <a href="/register" class="btn btn-primary btn-large">Зарегистрироваться</a>
-    </div>
-</div>
-{% endblock %}
-
-{% block extra_css %}
-<style>
-.hero-section {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--white);
-    padding: 6rem 2rem;
-    text-align: center;
-    margin-bottom: 3rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
-}
-
-.hero-content h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    animation: fadeInUp 1s ease;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.hero-content p {
-    font-size: 1.4rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-    animation: fadeInUp 1s ease 0.2s;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    animation: fadeInUp 1s ease 0.4s;
-}
-
-.hero-decoration {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-}
-
-.floating-icon {
-    position: absolute;
-    font-size: 2rem;
-    color: rgba(255, 255, 255, 0.2);
-    animation: float 6s ease-in-out infinite;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.floating-icon:hover {
-    color: rgba(255, 255, 255, 0.4);
-    transform: scale(1.2);
-}
-
-.water-icon { top: 20%; left: 10%; animation-delay: 0s; }
-.electricity-icon { top: 30%; right: 15%; animation-delay: 2s; }
-.gas-icon { bottom: 25%; left: 20%; animation-delay: 4s; }
-
-.features-section {
-    padding: 4rem 2rem;
-    text-align: center;
-    background: var(--white);
-}
-
-.section-title {
-    color: var(--primary-color);
-    margin-bottom: 3rem;
-    font-size: 2.5rem;
-    position: relative;
-    display: inline-block;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: var(--primary-color);
-    border-radius: 2px;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.feature-card {
-    background: var(--white);
-    padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.feature-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-size: 2.5rem;
-    transition: all 0.3s ease;
-}
-
-.water-icon { background: rgba(0, 123, 255, 0.1); color: #007bff; }
-.electricity-icon { background: rgba(255, 193, 7, 0.1); color: #ffc107; }
-.gas-icon { background: rgba(220, 53, 69, 0.1); color: #dc3545; }
-
-.feature-card:hover .feature-icon {
-    transform: scale(1.1);
-}
-
-.feature-card h3 {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-}
-
-.feature-card p {
-    color: #666;
-    line-height: 1.6;
-}
-
-.feature-hover {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--primary-color);
-    color: var(--white);
-    padding: 1rem;
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-}
-
-.feature-card:hover .feature-hover {
-    transform: translateY(0);
-}
-
-.accounts-section {
-    padding: 4rem 2rem;
-    background: var(--light-gray);
-}
-
-.accounts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.cta-section {
-    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-    color: var(--white);
-    padding: 4rem 2rem;
-    text-align: center;
-}
-
-.cta-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.cta-content h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.cta-content p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-}
-
-.btn-large {
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.pulse {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-</style>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Sound effects for icons
-    const icons = document.querySelectorAll('.floating-icon, .feature-card');
-    const sounds = {
-        water: document.getElementById('water-sound'),
-        electricity: document.getElementById('electricity-sound'),
-        gas: document.getElementById('gas-sound')
-    };
-
-    icons.forEach(icon => {
-        icon.addEventListener('click', function() {
-            const soundType = this.dataset.sound;
-            if (sounds[soundType]) {
-                sounds[soundType].currentTime = 0;
-                sounds[soundType].play();
-            }
-        });
-    });
-
-    // Load accounts
-    loadAccounts();
-});
-
-async function loadAccounts() {
-    try {
-        const response = await fetch('/api/accounts');
-        const accounts = await response.json();
-        const accountsList = document.getElementById('accountsList');
-        
-        accountsList.innerHTML = accounts.map(account => `
-            <div class="account-card">
-                <div class="account-header">
-                    <h3>Лицевой счет #${account.number}</h3>
-                    <span class="account-status ${account.status}">${account.status}</span>
+        <section class="services">
+            <h2>Наши услуги</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <i class="fas fa-tint"></i>
+                    <h3>Водоснабжение</h3>
+                    <p>Управление услугами холодного и горячего водоснабжения</p>
                 </div>
-                <div class="account-details">
-                    <p><i class="fas fa-user"></i> ${account.name}</p>
-                    <p><i class="fas fa-map-marker-alt"></i> ${account.address}</p>
+                <div class="service-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Электроэнергия</h3>
+                    <p>Контроль и оплата электроэнергии</p>
                 </div>
-                <div class="account-actions">
-                    <button class="btn btn-primary" onclick="viewDetails(${account.id})">
-                        <i class="fas fa-eye"></i> Подробнее
-                    </button>
+                <div class="service-card">
+                    <i class="fas fa-fire"></i>
+                    <h3>Отопление</h3>
+                    <p>Управление отопительными услугами</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-home"></i>
+                    <h3>Содержание жилья</h3>
+                    <p>Услуги по содержанию и ремонту</p>
                 </div>
             </div>
-        `).join('');
-    } catch (error) {
-        console.error('Error loading accounts:', error);
-    }
-}
+        </section>
 
-function viewDetails(accountId) {
-    window.location.href = `/accounts/${accountId}`;
-}
-</script>
-{% endblock %}
+        <section class="features">
+            <h2>Преимущества</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-clock"></i>
+                    <h3>Экономия времени</h3>
+                    <p>Оплачивайте услуги онлайн в любое время</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Безопасность</h3>
+                    <p>Защищенные платежи и личные данные</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Контроль расходов</h3>
+                    <p>Отслеживайте потребление и платежи</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Smart ЖКХ</h4>
+                <p>Современное решение для управления коммунальными услугами</p>
+            </div>
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <p>Email: info@smart-zhkh.ru</p>
+                <p>Телефон: 8-800-123-45-67</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Smart ЖКХ. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>
