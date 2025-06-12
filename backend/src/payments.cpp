@@ -66,7 +66,7 @@ void PaymentManager::payAllCharges(int account_id, const std::string& period) {
 std::vector<Payment> PaymentManager::listPayments(int account_id) {
     std::vector<Payment> payments;
     sqlite3_stmt* stmt;
-    const char* sql = "SELECT p.id, p.charge_id, p.amount, p.payment_date "
+     std::string sql = "SELECT p.id, p.charge_id, p.amount, p.payment_date "
                       "FROM payments p JOIN charges c ON p.charge_id = c.id "
                       "WHERE c.account_id = ?;";
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
