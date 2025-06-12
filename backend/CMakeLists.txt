@@ -16,12 +16,12 @@ find_package(Threads REQUIRED)
 
 # Исходные файлы
 set(SOURCES
-    src/cpp/main.cpp
-    src/cpp/account.cpp
-    src/cpp/charge.cpp
-    src/cpp/payments.cpp
-    src/cpp/db.cpp
-    src/cpp/api.cpp
+    src/main.cpp
+    src/account.cpp
+    src/charge.cpp
+    src/payments.cpp
+    src/db.cpp
+    src/api.cpp
 )
 
 # Основной сервер
@@ -46,9 +46,9 @@ if(BUILD_TESTS)
     find_package(Catch2 REQUIRED)
     
     set(TEST_SOURCES
-        tests/cpp/test_account.cpp
-        tests/cpp/test_charge.cpp
-        tests/cpp/test_payment.cpp
+        tests/test_account.cpp
+        tests/test_charge.cpp
+        tests/test_payment.cpp
     )
     
     add_executable(tests ${TEST_SOURCES})

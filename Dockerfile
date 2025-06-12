@@ -59,7 +59,7 @@ echo "🚀 Запуск C++ сервера..."\n\
 /app/backend/build/bin/logora_server &\n\
 echo "🌐 Запуск FastAPI..."\n\
 python -m uvicorn python.app:app --host 0.0.0.0 --port 8000\n' > /app/start.sh && \
-    chmod +x /app/start.sh
+    chmod +x /app/start.sh 
 
 EXPOSE 8000
 CMD ["/app/start.sh"]
