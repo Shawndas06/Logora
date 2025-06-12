@@ -13,7 +13,7 @@ struct Account {
     double area;
     int residents;
     std::string company;
-}
+};
 
 class AccountManager {
 private:
