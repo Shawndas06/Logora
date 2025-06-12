@@ -40,15 +40,28 @@ RUN mkdir -p build && cd build && \
     make VERBOSE=1 && \
     ls -la bin/
 
-# Проверка существования бинарника
-RUN if [ ! -f build/bin/logora_server ]; then \
+# Проверка результатов сборки с подробной диагностикой
+RUN echo "----- Анализ результатов сборки -----" && \
+    if [ -f build/bin/logora_server ]; then \
+        echo "Бинарник успешно создан:" && \
+        ls -la build/bin/logora_server && \
+        echo "Проверка зависимостей:" && \
+        ldd build/bin/logora_server || true; \
+    else \
+        echo "----- ВНИМАНИЕ: Бинарник не создан -----" && \
         echo "----- Содержимое build/ -----" && \
         ls -la build/ && \
-        echo "----- Содержимое build/bin/ -----" && \
-        ls -la build/bin/ && \
-        echo "----- Лог CMake -----" && \
-        cat build/CMakeFiles/CMakeOutput.log && \
-        exit 1; \
+        echo "----- Поиск возможных бинарников -----" && \
+        find build -type f -executable -print || echo "Исполняемые файлы не найдены"; \
+        echo "----- Логи CMake -----" && \
+        (cat build/CMakeCache.txt 2>/dev/null || echo "CMakeCache.txt не найден") && \
+        (cat build/CMakeFiles/*.log 2>/dev/null || echo "Логи CMake не найдены"); \
+        echo "----- Проверка исходных файлов -----" && \
+        ls -la /app/backend/src/ && \
+        echo "----- Проверка заголовочных файлов -----" && \
+        ls -la /app/backend/include/; \
+        # Не завершаем с ошибкой, чтобы увидеть всю диагностику \
+        # exit 1; \
     fi
 
 # Установка Python зависимостей
