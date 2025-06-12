@@ -27,7 +27,9 @@ def init_db():
     conn.execute('''CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT UNIQUE NOT NULL,
-                    password TEXT NOT NULL)''')
+                    password TEXT NOT NULL,
+                    full_name TEXT NOT NULL,
+                    email TEXT NOT NULL)''')
     conn.commit()
     conn.close()
 
@@ -61,10 +63,13 @@ def register():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
+        full_name = form.full_name.data
+        email = form.email.data
         hashed_password = generate_password_hash(password)
         try:
             conn = get_db_connection()
-            conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_password))
+            conn.execute('INSERT INTO users (username, password, full_name, email) VALUES (?, ?, ?, ?)',
+                        (username, hashed_password, full_name, email))
             conn.commit()
             conn.close()
             flash('Регистрация прошла успешно, теперь войдите', 'success')
