@@ -2,14 +2,12 @@ version: '3.8'
 
 services:
   logora:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
-      - "8000:8000"
-      - "8080:8080"
+      - "5000:5000"
     volumes:
-      - ./db:/app/db
+      - ./python:/app/python
     environment:
-      - DATABASE_URL=sqlite:///db/logora.sqlite
-    command: /app/start.sh
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    restart: unless-stopped
