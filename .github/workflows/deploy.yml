@@ -3,7 +3,7 @@ name: Build and Run Smart Project
 on:
   push:
     branches: [main]
-  workflow_dispatch:  # позволяет запускать вручную из интерфейса GitHub
+  workflow_dispatch:
 
 jobs:
   build-and-run:
@@ -21,8 +21,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: List repository files
+      - name: List all files for debugging
         run: ls -R
 
       - name: Build and start containers
-        run: docker-compose -f smart/docker-compose.yml up -d --build
+        run: docker-compose up -d --build
