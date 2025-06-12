@@ -6,16 +6,16 @@ RUN apt-get update && apt-get install -y \
     cmake \
     libsqlite3-dev \
     libssl-dev \
-    libcpprest2.10 \
+    libcpprest-dev \  # Изменено с libcpprest2.10 на libcpprest-dev
     libboost-system-dev \
     libboost-filesystem-dev \
     pkg-config \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
-# Удаляем настройку альтернативных версий компилятора (так как используем версию по умолчанию)
 WORKDIR /app
 
-# Копирование только необходимых файлов
+# Копирование файлов проекта
 COPY backend/CMakeLists.txt /app/backend/
 COPY backend/src /app/backend/src
 COPY backend/include /app/backend/include
@@ -23,7 +23,7 @@ COPY backend/include /app/backend/include
 # Сборка C++ сервера
 WORKDIR /app/backend
 RUN mkdir -p build && cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr .. && \
     make VERBOSE=1 && \
     ls -la bin/
 
@@ -38,7 +38,7 @@ RUN if [ ! -f build/bin/logora_server ]; then \
         exit 1; \
     fi
 
-# Остальные шаги...
+# Установка Python зависимостей
 COPY python /app/python
 COPY db /app/db
 
