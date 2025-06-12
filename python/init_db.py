@@ -1,7 +1,12 @@
 import sqlite3
 from werkzeug.security import generate_password_hash
+import os
 
 def init_db():
+    # Remove existing database file if it exists
+    if os.path.exists('db.sqlite3'):
+        os.remove('db.sqlite3')
+        
     conn = sqlite3.connect('db.sqlite3')
     cursor = conn.cursor()
 
