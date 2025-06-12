@@ -11,18 +11,29 @@ RUN apt-get update && apt-get install -y \
     libboost-filesystem-dev \
     pkg-config \
     git \
+    tree \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Сначала копируем только CMakeLists.txt для кэширования
-COPY backend/CMakeLists.txt /app/backend/
+# Проверка структуры проекта перед копированием
+RUN echo "----- Структура проекта до копирования -----" && \
+    ls -la && \
+    mkdir -p backend && \
+    tree -L 3 || echo "Tree не установлен"
 
-# Затем копируем остальные файлы
+# Копирование файлов проекта с проверкой
+COPY backend/CMakeLists.txt /app/backend/
 COPY backend/src /app/backend/src
 COPY backend/include /app/backend/include
 
-# Сборка C++ сервера
+RUN echo "----- Проверка скопированных файлов -----" && \
+    ls -la /app/backend/ && \
+    ls -la /app/backend/src/ && \
+    ls -la /app/backend/include/ && \
+    cat /app/backend/CMakeLists.txt || echo "CMakeLists.txt не найден"
+
+# Сборка с подробной отладкой (см. выше)
 WORKDIR /app/backend
 RUN mkdir -p build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release .. && \
