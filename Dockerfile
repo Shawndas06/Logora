@@ -1,11 +1,12 @@
-# Используем Python 3.9 как базу
-FROM python:3.9-slim AS base
+# Используем более новый Python-образ с OpenSSL 3.0+
+FROM python:3.11-slim AS base
 
-# Установим системные зависимости
+# Установим системные зависимости с добавлением libssl-dev
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     libsqlite3-dev \
+    libssl-dev \  # КРИТИЧНОЕ ИСПРАВЛЕНИЕ
     curl \
     gcc \
     g++ \
@@ -23,7 +24,7 @@ COPY db /app/db
 WORKDIR /app/python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Сборка C++ сервера
+# Сборка C++ сервера (остаётся без изменений)
 WORKDIR /app/backend
 RUN mkdir -p build && cd build && cmake .. && make && \
     ls -la bin/ && \
