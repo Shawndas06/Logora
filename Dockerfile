@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     libsqlite3-dev \
-    libssl-dev \  #КРИТИЧНОЕ ИСПРАВЛЕНИЕ (без пробела перед )\
+    libssl-dev \ 
     curl \
     gcc \
     g++ \
