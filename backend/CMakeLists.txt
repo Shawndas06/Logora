@@ -20,12 +20,12 @@ message(STATUS "Boost version: ${Boost_VERSION}")
 
 # Исходные файлы
 set(SOURCES
-    src/cpp/main.cpp
-    src/cpp/account.cpp
-    src/cpp/charge.cpp
-    src/cpp/payments.cpp
-    src/cpp/db.cpp
-    src/cpp/api.cpp
+    src/main.cpp
+    src/account.cpp
+    src/charge.cpp
+    src/payments.cpp
+    src/db.cpp
+    src/api.cpp
 )
 
 # Основной сервер
