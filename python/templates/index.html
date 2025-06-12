@@ -15,15 +15,15 @@
     <div class="hero-decoration">
         <div class="floating-icon water-icon" data-sound="water">
             <i class="fas fa-tint"></i>
-            <audio id="water-sound" src="{{ url_for('static', path='sounds/water.mp3') }}" preload="auto"></audio>
+            <audio id="water-sound" src="{{ url_for('static', filename='sounds/water.mp3') }}" preload="auto"></audio>
         </div>
         <div class="floating-icon electricity-icon" data-sound="electricity">
             <i class="fas fa-bolt"></i>
-            <audio id="electricity-sound" src="{{ url_for('static', path='sounds/electricity.mp3') }}" preload="auto"></audio>
+            <audio id="electricity-sound" src="{{ url_for('static', filename='sounds/electricity.mp3') }}" preload="auto"></audio>
         </div>
         <div class="floating-icon gas-icon" data-sound="gas">
             <i class="fas fa-fire"></i>
-            <audio id="gas-sound" src="{{ url_for('static', path='sounds/gas.mp3') }}" preload="auto"></audio>
+            <audio id="gas-sound" src="{{ url_for('static', filename='sounds/gas.mp3') }}" preload="auto"></audio>
         </div>
     </div>
 </div>
