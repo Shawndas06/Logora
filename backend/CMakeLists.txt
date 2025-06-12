@@ -12,13 +12,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 find_package(OpenSSL 1.1.1 REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(cpprestsdk 2.10 REQUIRED)
-find_package(Boost 1.71 REQUIRED COMPONENTS system filesystem)
+find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 # Проверка версий
 message(STATUS "OpenSSL version: ${OPENSSL_VERSION}")
 message(STATUS "Boost version: ${Boost_VERSION}")
 
-# Исходные файлы (проверьте пути!)
+# Исходные файлы
 set(SOURCES
     src/cpp/main.cpp
     src/cpp/account.cpp

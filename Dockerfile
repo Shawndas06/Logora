@@ -1,14 +1,14 @@
 FROM python:3.11-slim AS base
 
-# Установка зависимостей с фиксированными версиями
+# Установка зависимостей с доступными версиями пакетов
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     libsqlite3-dev \
     libssl-dev \
     libcpprest2.10 \
-    libboost-system1.71-dev \
-    libboost-filesystem1.71-dev \
+    libboost-system-dev \
+    libboost-filesystem-dev \
     g++-10 \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
