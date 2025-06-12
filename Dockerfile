@@ -27,41 +27,34 @@ COPY backend/CMakeLists.txt /app/backend/
 COPY backend/src /app/backend/src
 COPY backend/include /app/backend/include
 
-RUN echo "----- Проверка скопированных файлов -----" && \
-    ls -la /app/backend/ && \
-    ls -la /app/backend/src/ && \
-    ls -la /app/backend/include/ && \
-    cat /app/backend/CMakeLists.txt || echo "CMakeLists.txt не найден"
+# Проверка скопированных файлов
+RUN echo "----- Проверка файлов проекта -----" && \
+    echo "1. Содержимое /app/backend:" && ls -la /app/backend/ && \
+    echo "2. Содержимое src:" && ls -la /app/backend/src/ && \
+    echo "3. Содержимое include:" && ls -la /app/backend/include/ && \
+    echo "4. Проверка CMakeLists.txt:" && [ -f /app/backend/CMakeLists.txt ] && cat /app/backend/CMakeLists.txt || echo "CMakeLists.txt не найден"
 
-# Сборка с подробной отладкой (см. выше)
+# Сборка с подробной отладкой
 WORKDIR /app/backend
 RUN mkdir -p build && cd build && \
+    echo "----- Конфигурация CMake -----" && \
     cmake -DCMAKE_BUILD_TYPE=Release .. && \
-    make VERBOSE=1 && \
-    ls -la bin/
+    echo "----- Сборка проекта -----" && \
+    make VERBOSE=1
 
-# Проверка результатов сборки с подробной диагностикой
-RUN echo "----- Анализ результатов сборки -----" && \
+# Проверка результатов сборки
+RUN echo "----- Результаты сборки -----" && \
     if [ -f build/bin/logora_server ]; then \
         echo "Бинарник успешно создан:" && \
         ls -la build/bin/logora_server && \
         echo "Проверка зависимостей:" && \
         ldd build/bin/logora_server || true; \
     else \
-        echo "----- ВНИМАНИЕ: Бинарник не создан -----" && \
-        echo "----- Содержимое build/ -----" && \
-        ls -la build/ && \
-        echo "----- Поиск возможных бинарников -----" && \
-        find build -type f -executable -print || echo "Исполняемые файлы не найдены"; \
-        echo "----- Логи CMake -----" && \
-        (cat build/CMakeCache.txt 2>/dev/null || echo "CMakeCache.txt не найден") && \
-        (cat build/CMakeFiles/*.log 2>/dev/null || echo "Логи CMake не найдены"); \
-        echo "----- Проверка исходных файлов -----" && \
-        ls -la /app/backend/src/ && \
-        echo "----- Проверка заголовочных файлов -----" && \
-        ls -la /app/backend/include/; \
-        # Не завершаем с ошибкой, чтобы увидеть всю диагностику \
-        # exit 1; \
+        echo "----- ОШИБКА: Бинарник не создан -----" && \
+        echo "1. Поиск возможных бинарников:" && find build -type f -executable -print || true; \
+        echo "2. Содержимое build:" && ls -la build/; \
+        echo "3. Логи CMake:" && (find build -name "*.log" -exec cat {} \; || true); \
+        exit 1; \
     fi
 
 # Установка Python зависимостей
