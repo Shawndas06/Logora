@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     libsqlite3-dev \
-    libssl-dev \ 
+    libssl-dev \
     curl \
     gcc \
     g++ \
@@ -15,16 +15,20 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Копируем проект
+# Копируем проект с правильной структурой
 COPY backend /app/backend
 COPY python /app/python
 COPY db /app/db
+
+# Копируем статические файлы и шаблоны в правильные директории
+COPY python/static /app/python/static
+COPY python/templates /app/python/templates
 
 # Установка зависимостей Python
 WORKDIR /app/python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Сборка C++ сервера (остаётся без изменений)
+# Сборка C++ сервера
 WORKDIR /app/backend
 RUN mkdir -p build && cd build && cmake .. && make && \
     ls -la bin/ && \
@@ -46,6 +50,9 @@ ENV DATABASE_URL=sqlite:///db/logora.sqlite
 ENV DB_PATH=/app/db/logora.sqlite
 ENV LOG_FILE=/app/python/logs/app.log
 ENV LOG_LEVEL=INFO
+ENV STATIC_URL=/static
+ENV STATIC_PATH=/app/python/static
+ENV TEMPLATES_PATH=/app/python/templates
 
 # Проброс портов
 EXPOSE 8000
@@ -58,7 +65,7 @@ echo "🔧 Инициализация БД..."\n\
 python /app/python/init_db.py\n\
 echo "🚀 Запуск C++ сервера..."\n\
 /app/backend/build/bin/logora_server &\n\
-echo "🌐 Запуск FastAPI..."\n\
+echo "🌐 Запуск FastAPI с поддержкой статических файлов..."\n\
 python -m uvicorn python.app:app --host 0.0.0.0 --port 8000\n' > /app/start.sh && chmod +x /app/start.sh
 
 # Запуск скрипта
