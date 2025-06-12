@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     cmake \
     libsqlite3-dev \
     libssl-dev \
-    libcpprest-dev \  # Изменено с libcpprest2.10 на libcpprest-dev
+    libcpprest-dev \
     libboost-system-dev \
     libboost-filesystem-dev \
     pkg-config \
