@@ -21,5 +21,3 @@ make up
 
  Требования:
 - Docker и Docker Compose
-
-https://logora.onrender.com - ссылка на сайт
