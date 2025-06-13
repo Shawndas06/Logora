@@ -1,13 +1,69 @@
-version: '3.8'
-
 services:
-  logora:
-    build: .
+  frontend:
+    build:
+      context: './frontend'
+      target: production
+      args:
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL:-http://localhost:3005}
     ports:
-      - "5000:5000"
-    volumes:
-      - ./python:/app/python
+      - "80:80"
     environment:
-      - FLASK_APP=app.py
-      - FLASK_ENV=development
+      - NODE_ENV=production
     restart: unless-stopped
+    healthcheck:
+        test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+    depends_on:
+      - api
+
+  api:
+    build: ./api
+    container_name: api_service
+    ports:
+      - "3005:5000"
+    environment:
+      - SERVICE_NAME=api
+      - ACCOUNT_SERVICE_URL=http://account:5000
+      - BILLING_SERVICE_URL=http://billing:5000
+      - PAYMENT_SERVICE_URL=http://payment:5000
+      - REPORT_SERVICE_URL=http://report:5000
+    depends_on:
+      - billing
+      - payment
+      - report
+      - account
+
+  billing:
+    build: ./billing
+    container_name: billing_service
+    ports:
+      - "5001:5000"
+    environment:
+      - SERVICE_NAME=billing
+
+  payment:
+    build: ./payment
+    container_name: payment_service
+    ports:
+      - "5002:5000"
+    environment:
+      - SERVICE_NAME=payment
+
+  report:
+    build: ./report
+    container_name: report_service
+    ports:
+      - "5003:5000"
+    environment:
+      - SERVICE_NAME=report
+
+  account:
+    build: ./accounts
+    container_name: account_service
+    ports:
+      - "5004:5000"
+    environment:
+      - SERVICE_NAME=account
