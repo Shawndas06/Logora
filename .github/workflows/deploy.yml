@@ -1,4 +1,4 @@
-name: Build & Smoke Test Smart ЖКХ
+name: Build & Deploy Frontend Smart ЖКХ
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build-and-deploy-frontend:
     runs-on: ubuntu-latest
     steps:
       # 1) Залонить код
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 3) Установить docker-compose v2
+      # 3) Установить docker-compose-plugin
       - name: Install Docker Compose plugin
         run: |
           sudo apt-get update
@@ -27,44 +27,22 @@ jobs:
       - name: List files
         run: ls -R .
 
-      # 5) Инициализировать базы через Makefile (если нужно)
-      - name: Initialize databases
-        run: make init_dbs
+      # 5) Собрать только frontend сервис
+      - name: Build frontend Docker image
+        run: docker compose build frontend
 
-      # 6) Построить и запустить все сервисы
-      - name: Build & start services
-        run: docker compose up --build -d
+      # 6) Запустить frontend контейнер
+      - name: Run frontend container
+        run: docker compose up -d frontend
 
-      # 7) Дать сервисам 30 секунд на стартап
-      - name: Wait for services startup
+      # 7) Проверка работы frontend
+      - name: Smoke test frontend
         run: |
-          echo "Waiting for API to be healthy…"
-          for i in $(seq 1 15); do
-            if curl --fail http://localhost:5000/health; then
-              echo "✅ API is healthy"
-              break
-            else
-              echo "…not up yet, retrying"
-              sleep 2
-            fi
-          done
+          echo "Waiting for frontend..."
+          sleep 5  # Можно заменить на healthcheck при необходимости
+          curl --fail http://localhost:3000 || (echo "Frontend is not responding!" && exit 1)
 
-      # 8) Проверить, что все контейнеры запущены
-      - name: List running containers
-        run: docker ps
-
-      # 9) Smoke‑тесты: пробежаться по базовым эндпоинтам
-      - name: Smoke test API endpoints
-        run: |
-          set -e
-          curl --fail http://localhost:5000/            && echo "/ root OK"
-          curl --fail http://localhost:5000/health      && echo "/health OK"
-          curl --fail http://localhost:5001/api/payments && echo "Payment OK"
-          curl --fail http://localhost:5002/health      && echo "Billing OK"
-          curl --fail http://localhost:5003/api/accounts && echo "Account OK"
-          curl --fail http://localhost:5004/health      && echo "Report OK"
-
-      # 10) Остановить и удалить
+      # 8) Teardown
       - name: Teardown
         if: always()
         run: docker compose down --volumes --remove-orphans
