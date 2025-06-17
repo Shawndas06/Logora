@@ -3,10 +3,10 @@ from services.report_service import ReportService
 
 report_bp = Blueprint('reports', __name__)
 
-@report_bp.route('/reports', methods=['POST'])
+@report_bp.route ('/api/reports/receipt', methods=['GET'])
 def generate_report():
     data = request.get_json()
-    account_id = data.get('account_id')
+    account_id = data.get('accountId')
     period = data.get('period')
 
     if not account_id or not period:
