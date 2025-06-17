@@ -2,10 +2,12 @@ import sqlite3
 from flask import request, jsonify, Flask
 from flask_cors import CORS
 
+from config import Config
+
 DB = 'account.db'
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=Config.CORS_SUPPORTS_CREDENTIALS)
 
 def get_db():
     conn = sqlite3.connect(DB)
@@ -95,4 +97,4 @@ def update_account_status(account_id):
     return jsonify({"success": True, "data": dict(updated)})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host=Config.HOST, port=Config.PORT)

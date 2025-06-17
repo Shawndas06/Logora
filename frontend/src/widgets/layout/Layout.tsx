@@ -21,6 +21,11 @@ const MENU_ITEMS = [
     link: '/accounts',
     protected: true,
   },
+  {
+    label: 'Заявки',
+    link: '/orders',
+    protected: true,
+  },
 ];
 
 export const Layout = ({ children }: Props) => {

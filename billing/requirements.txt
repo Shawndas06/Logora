@@ -4,4 +4,4 @@ Flask-Cors>=3.0.10
 Flask-WTF>=1.0.1
 WTForms>=3.0.0
 Werkzeug>=2.0.0
-
+psutil==5.9.6

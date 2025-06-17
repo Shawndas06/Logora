@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "pdf_oq.py"]
+CMD ["python", "app.py"]

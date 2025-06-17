@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Account } from '~/pages/account';
 import { Accounts } from '~/pages/accounts';
 import { Home } from '~/pages/home';
+import { Orders } from '~/pages/orders';
 import { PaymentHistory } from '~/pages/paymentHistory';
 
 import { BrowserRouter, Route, Routes } from 'react-router';
@@ -36,6 +37,14 @@ export const App = () => {
             <Layout>
               <Routes>
                 <Route path="/" index element={<Home />} />
+                <Route
+                  path="/orders"
+                  element={
+                    <ProtectedRoute>
+                      <Orders />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="accounts">
                   <Route
                     index
@@ -45,7 +54,14 @@ export const App = () => {
                       </ProtectedRoute>
                     }
                   />
-                  <Route path=":accountId/payments" element={<PaymentHistory />} />
+                  <Route
+                    path=":accountId/payments"
+                    element={
+                      <ProtectedRoute>
+                        <PaymentHistory />
+                      </ProtectedRoute>
+                    }
+                  />
                   <Route
                     path=":accountId"
                     element={

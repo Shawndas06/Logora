@@ -1,0 +1,160 @@
+[2025-06-16 15:46:08] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 15:46:08] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 15:46:09] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 15:46:09] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 15:46:09] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 15:46:09] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 15:46:13] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 15:46:13] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 15:48:26] INFO [app:85] [e1163062] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 15:48:26] INFO [app:91] [e1163062] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 5155 bytes
+[2025-06-16 16:04:51] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:04:51] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:05:01] INFO [app:82] [7bed616f] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 16:05:01] INFO [app:88] [7bed616f] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 5155 bytes
+[2025-06-16 16:05:24] INFO [app:82] [5588e5f1] [GET http://127.0.0.1:3005/api] [127.0.0.1] - Request started - GET /api
+[2025-06-16 16:05:24] WARNING [app:30] [5588e5f1] [GET http://127.0.0.1:3005/api] [127.0.0.1] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-16 16:05:24] INFO [app:88] [5588e5f1] [GET http://127.0.0.1:3005/api] [127.0.0.1] - Request completed - GET /api - Status: 404 - Size: 49 bytes
+[2025-06-16 16:05:52] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:05:52] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:06:00] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:06:00] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:06:01] INFO [app:82] [53bb7aad] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 16:06:01] INFO [app:88] [53bb7aad] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 5155 bytes
+[2025-06-16 16:06:02] INFO [app:82] [d4ceeb54] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 16:06:02] INFO [app:88] [d4ceeb54] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 5155 bytes
+[2025-06-16 16:06:08] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:06:08] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:06:09] INFO [app:82] [83883920] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 16:06:09] ERROR [app:1414] [83883920] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Exception on /api/billings [GET]
+Traceback (most recent call last):
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/dzhabrail/Desktop/Logora 2/billing_new/routes/billing_routes.py", line 9, in get_billing
+    int({})
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
+[2025-06-16 16:06:09] ERROR [app:38] [83883920] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - 500 error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+Traceback (most recent call last):
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/dzhabrail/Desktop/Logora 2/billing_new/routes/billing_routes.py", line 9, in get_billing
+    int({})
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
+[2025-06-16 16:06:09] INFO [app:88] [83883920] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 500 - Size: 52 bytes
+[2025-06-16 16:07:06] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:07:06] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:07:08] INFO [app:82] [aa439d73] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 16:07:08] ERROR [app:1414] [aa439d73] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Exception on /api/billings [GET]
+Traceback (most recent call last):
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/dzhabrail/Desktop/Logora 2/billing_new/routes/billing_routes.py", line 9, in get_billing
+    int({})
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
+[2025-06-16 16:07:08] ERROR [app:38] [aa439d73] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - 500 error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+Traceback (most recent call last):
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/dzhabrail/Desktop/Logora 2/billing_new/routes/billing_routes.py", line 9, in get_billing
+    int({})
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
+[2025-06-16 16:07:08] INFO [app:88] [aa439d73] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 500 - Size: 52 bytes
+[2025-06-16 16:07:17] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:07:17] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:07:18] INFO [app:82] [c8a61def] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 16:07:18] INFO [app:88] [c8a61def] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 5155 bytes
+[2025-06-16 16:07:54] INFO [app:82] [6c0a3881] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 16:07:54] INFO [app:88] [6c0a3881] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 5155 bytes
+[2025-06-16 16:07:57] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:07:57] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:08:02] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:08:02] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:08:02] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-16 16:08:02] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-16 16:08:05] INFO [app:82] [84943ad5] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-16 16:08:05] INFO [app:88] [84943ad5] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8614 bytes
+[2025-06-17 10:11:55] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 10:11:55] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-17 10:11:55] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 10:11:55] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-17 10:14:21] INFO [app:82] [8da113d0] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:14:21] INFO [app:88] [8da113d0] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8614 bytes
+[2025-06-17 10:22:54] INFO [app:82] [a6091929] [PUT http://localhost:3007/billings/paid] [127.0.0.1] - Request started - PUT /billings/paid
+[2025-06-17 10:22:54] WARNING [app:30] [a6091929] [PUT http://localhost:3007/billings/paid] [127.0.0.1] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 10:22:54] INFO [app:88] [a6091929] [PUT http://localhost:3007/billings/paid] [127.0.0.1] - Request completed - PUT /billings/paid - Status: 404 - Size: 58 bytes
+[2025-06-17 10:23:28] INFO [app:82] [ca5d5436] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request started - PUT /api/billings/paid
+[2025-06-17 10:23:28] INFO [app:88] [ca5d5436] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request completed - PUT /api/billings/paid - Status: 500 - Size: 61 bytes
+[2025-06-17 10:24:04] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 10:24:04] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-17 10:24:05] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 10:24:05] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-17 10:24:10] INFO [app:82] [8e06831f] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request started - PUT /api/billings/paid
+[2025-06-17 10:24:10] INFO [app:88] [8e06831f] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request completed - PUT /api/billings/paid - Status: 500 - Size: 61 bytes
+[2025-06-17 10:24:39] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 10:24:39] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-17 10:24:43] INFO [app:82] [671ce5a6] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request started - PUT /api/billings/paid
+[2025-06-17 10:24:43] INFO [app:88] [671ce5a6] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request completed - PUT /api/billings/paid - Status: 500 - Size: 61 bytes
+[2025-06-17 10:25:04] INFO [app:82] [f1fdf23f] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request started - PUT /api/billings/paid
+[2025-06-17 10:25:04] INFO [app:88] [f1fdf23f] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request completed - PUT /api/billings/paid - Status: 500 - Size: 61 bytes
+[2025-06-17 10:25:24] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 10:25:24] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-17 10:25:28] INFO [app:82] [3b8a6c4f] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request started - PUT /api/billings/paid
+[2025-06-17 10:25:28] INFO [app:88] [3b8a6c4f] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request completed - PUT /api/billings/paid - Status: 200 - Size: 72 bytes
+[2025-06-17 10:25:28] INFO [app:82] [1cdbdb29] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:25:28] INFO [app:88] [1cdbdb29] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8509 bytes
+[2025-06-17 10:25:41] INFO [app:82] [6cc13a4e] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request started - PUT /api/billings/paid
+[2025-06-17 10:25:41] INFO [app:88] [6cc13a4e] [PUT http://localhost:3007/api/billings/paid] [127.0.0.1] - Request completed - PUT /api/billings/paid - Status: 200 - Size: 72 bytes
+[2025-06-17 10:25:41] INFO [app:82] [c9168c74] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:25:41] INFO [app:88] [c9168c74] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 10:25:49] INFO [app:17] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 10:25:49] INFO [app:46] [None] [None None] [None] - API application created successfully
+[2025-06-17 10:31:03] INFO [app:82] [be1e22be] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:31:03] INFO [app:88] [be1e22be] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 10:31:08] INFO [app:82] [d78c633c] [GET http://127.0.0.1:3007/api/billings?account=2&period=12] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:31:08] INFO [app:88] [d78c633c] [GET http://127.0.0.1:3007/api/billings?account=2&period=12] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 10:36:10] INFO [app:82] [bce3cb57] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:36:10] INFO [app:88] [bce3cb57] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 10:36:19] INFO [app:82] [1c5cb930] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:36:19] INFO [app:88] [1c5cb930] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 10:42:37] INFO [app:82] [c9468005] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:42:37] INFO [app:88] [c9468005] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 10:49:28] INFO [app:82] [53addb88] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 10:49:28] INFO [app:88] [53addb88] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 12:23:25] INFO [app:82] [93eeca39] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 12:23:25] INFO [app:88] [93eeca39] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 12:25:47] INFO [app:82] [0ace11d4] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 12:25:47] INFO [app:88] [0ace11d4] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes
+[2025-06-17 14:21:58] INFO [app:82] [08e5ab12] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request started - GET /api/billings
+[2025-06-17 14:21:58] INFO [app:88] [08e5ab12] [GET http://127.0.0.1:3007/api/billings?account=2&period=6] [127.0.0.1] - Request completed - GET /api/billings - Status: 200 - Size: 8404 bytes

@@ -1,3 +1,7 @@
-reportlab
-qrcode
-pillow
+Flask>=2.0.0
+Flask-CORS>=4.0.0
+reportlab==4.0.4
+qrcode[pil]==7.4.2
+Pillow>=10.0.0
+python-dateutil>=2.8.2
+requests

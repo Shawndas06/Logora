@@ -47,7 +47,7 @@ export const Accounts = () => {
     <Container size="lg" py="xl">
       <Stack gap="xl">
         <Group justify="space-between">
-          <Title order={2}>Лицевые счета</Title>
+          <Title order={1}>Лицевые счета</Title>
           <Button leftSection={<IconPlus size={16} />} onClick={() => setModalOpened(true)}>
             Добавить счёт
           </Button>

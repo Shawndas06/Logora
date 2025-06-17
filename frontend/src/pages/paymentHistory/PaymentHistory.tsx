@@ -124,7 +124,7 @@ export const PaymentHistory = () => {
                 {payments.map((payment) => (
                   <Table.Tr key={payment.id}>
                     <Table.Td>
-                      <Text size="sm" c="dark">
+                      <Text size="sm" c="dark" ta="left">
                         {formatDate(payment.createdAt)}
                       </Text>
                     </Table.Td>
@@ -149,7 +149,7 @@ export const PaymentHistory = () => {
                 </Text>
                 <Text size="sm" fw={600}>
                   Общая сумма:{' '}
-                  <Text span c="green" fw={700}>
+                  <Text span fw={700}>
                     {formatCurrency(payments.reduce((sum, p) => sum + p.amount, 0))}
                   </Text>
                 </Text>

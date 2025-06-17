@@ -9,6 +9,7 @@ import {
   Modal,
   Paper,
   PasswordInput,
+  Select,
   Stack,
   Text,
   TextInput,
@@ -17,9 +18,11 @@ import {
 import {
   IconEye,
   IconEyeOff,
+  IconGenderBigender,
   IconLock,
   IconLogin,
   IconMail,
+  IconMan,
   IconUserPlus,
 } from '@tabler/icons-react';
 import { z } from 'zod';
@@ -42,6 +45,9 @@ const loginSchema = z.object({
 const registerSchema = z
   .object({
     email: z.string().min(1, 'Email обязателен').email('Неверный формат email'),
+    name: z.string().min(1, 'Поле ФИО не может быть пустым'),
+    description: z.string().optional(),
+    sex: z.string().min(1, 'Поле должно быть заполнено'),
     password: z
       .string()
       .min(1, 'Пароль обязателен')
@@ -108,23 +114,38 @@ export const AuthModal = () => {
       email: '',
       password: '',
       confirmPassword: '',
+      name: '',
+      sex: '',
+      description: '',
     },
   });
 
   const handleLogin = (data: LoginFormData) => {
-    signIn({ email: data.email, password: data.password }, { 
-      onSuccess: () => {
-        setModalOpened(false);
-      },
-    });
+    signIn(
+      { email: data.email, password: data.password },
+      {
+        onSuccess: () => {
+          setModalOpened(false);
+        },
+      }
+    );
   };
 
   const handleRegister = (data: RegisterFormData) => {
-    signUp({ email: data.email, password: data.password }, {
-      onSuccess: () => {
-        setMode('login');
+    signUp(
+      {
+        email: data.email,
+        password: data.password,
+        name: data.name,
+        description: data.description ?? '',
+        sex: Number.parseInt(data.sex),
       },
-    });
+      {
+        onSuccess: () => {
+          setMode('login');
+        },
+      }
+    );
   };
 
   const handleModeSwitch = (newMode: AuthMode) => {
@@ -282,6 +303,40 @@ export const AuthModal = () => {
               />
 
               <Controller
+                name="name"
+                control={registerControl}
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    label="ФИО"
+                    placeholder="Иванов Иван Иванович"
+                    leftSection={<IconMan size={16} />}
+                    error={registerErrors.name?.message}
+                    disabled={isLoading}
+                  />
+                )}
+              />
+
+              <Controller
+                name="sex"
+                control={registerControl}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    label="Пол"
+                    placeholder="Выберите пол"
+                    leftSection={<IconGenderBigender size={16} />}
+                    data={[
+                      { value: '1', label: 'Мужской' },
+                      { value: '0', label: 'Женский' },
+                    ]}
+                    error={registerErrors.sex?.message}
+                    disabled={isLoading}
+                  />
+                )}
+              />
+
+              <Controller
                 name="password"
                 control={registerControl}
                 render={({ field }) => (
@@ -375,7 +430,7 @@ export const AuthModal = () => {
           onClick={() => {
             resetSignIn();
             resetSignUp();
-setModalOpened(true);
+            setModalOpened(true);
           }}
         >
           Войти

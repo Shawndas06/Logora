@@ -1,72 +1,67 @@
 import os
-import sqlite3
 import uuid
 import requests
 from flask import Flask, request, session, jsonify
 from flask_cors import CORS
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Blueprint
+
+from config import Config
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
 app.config.update(SESSION_COOKIE_SAMESITE=None, SESSION_COOKIE_SECURE=False)
-CORS(app, supports_credentials=True)
-
-ACCOUNT_SERVICE_URL = os.getenv('ACCOUNT_SERVICE_URL', 'http://account:5001')
-BILLING_SERVICE_URL = os.getenv('BILLING_SERVICE_URL', 'http://billing:5002')
-PAYMENT_SERVICE_URL = os.getenv('PAYMENT_SERVICE_URL', 'http://payment:5003')
-REPORT_SERVICE_URL = os.getenv('REPORT_SERVICE_URL', 'http://report:5004')
-
-DB = 'db.sqlite3'
+CORS(app, supports_credentials=Config.CORS_SUPPORTS_CREDENTIALS)
 
 def require_auth():
     if 'user_id' not in session:
         return jsonify({"success": False, "message": "Unauthorized"}), 401
     return None
 
-def get_db():
+@app.route('/api/payments/<int:payment_id>', methods=['GET'])
+def get_payment(payment_id):
+    auth_error = require_auth()
+    if auth_error:
+        return auth_error
+    
+    payment_url = f"{Config.PAYMENT_SERVICE_URL}/api/payments/{payment_id}"
+    
     try:
-        conn = sqlite3.connect(DB)
-        conn.row_factory = sqlite3.Row
-        return conn
-    except sqlite3.Error as e:
-        return None
+        response = requests.get(
+            payment_url,
+            headers={'Content-Type': 'application/json'},
+            timeout=10
+        )
+        
+        return response.content, response.status_code, {'Content-Type': 'application/json'}
+        
+    except requests.exceptions.RequestException:
+        return jsonify({
+            "success": False, 
+            "message": "Payment service unavailable"
+        }), 503
 
-
-def init_db():
-    conn = get_db()
-    if conn:
-        conn.execute('''CREATE TABLE IF NOT EXISTS users (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        username TEXT UNIQUE NOT NULL,
-                        password TEXT NOT NULL)''')
-        conn.commit()
-        conn.close()
-
-
-init_db()
-
-# TODO: Implement full function to handle payments while calling billing service!
-@app.route('/api/payments', methods=['GET', 'POST'])
+@app.route('/api/payments', methods=['POST'])
 def payments():
     auth_error = require_auth()
     if auth_error:
         return auth_error
     
-    payment_url = f"{PAYMENT_SERVICE_URL}/payments"
-    billing_url = f"{BILLING_SERVICE_URL}/api/billings"
+    payment_url = f"{Config.PAYMENT_SERVICE_URL}/api/payments"
     
     try:
-        headers = {'Content-Type': 'application/json'}
+        response = requests.post(
+            payment_url,
+            headers={'Content-Type': 'application/json'},
+            json=request.get_json(),
+            timeout=10
+        )
         
-        if request.method == 'GET':
-            response = requests.get(url, headers=headers, params=request.args)
-        elif request.method == 'POST':
-            response = requests.post(payment_url, headers=headers, json=request.get_json())
+        return response.content, response.status_code, {'Content-Type': 'application/json'}
         
-        return jsonify(response.json()), response.status_code
-    except requests.exceptions.RequestException as e:
-        return jsonify({"success": False, "message": "Payment service unavailable"}), 503
+    except requests.exceptions.RequestException:
+        return jsonify({
+            "success": False, 
+            "message": "Payment service unavailable"
+        }), 503
 
 @app.route('/api/accounts', defaults={'path': ''}, methods=['GET', 'POST'])
 @app.route('/api/accounts/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -75,24 +70,23 @@ def proxy_accounts(path):
     if auth_error:
         return auth_error
     
-    url = f"{ACCOUNT_SERVICE_URL}/api/accounts"
+    url = f"{Config.ACCOUNT_SERVICE_URL}/api/accounts"
     if path:
         url += f"/{path}"
     
     try:
-        headers = {'Content-Type': 'application/json'}
+        response = requests.request(
+            method=request.method,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            json=request.get_json() if request.method in ['POST', 'PUT'] else None,
+            params=dict(request.args) if request.method == 'GET' else None,
+            timeout=10
+        )
         
-        if request.method == 'GET':
-            response = requests.get(url, headers=headers, params=request.args)
-        elif request.method == 'POST':
-            response = requests.post(url, headers=headers, json=request.get_json())
-        elif request.method == 'PUT':
-            response = requests.put(url, headers=headers, json=request.get_json())
-        elif request.method == 'DELETE':
-            response = requests.delete(url, headers=headers)
+        return response.content, response.status_code, {'Content-Type': 'application/json'}
         
-        return jsonify(response.json()), response.status_code
-    except requests.exceptions.RequestException as e:
+    except requests.exceptions.RequestException:
         return jsonify({"success": False, "message": "Account service unavailable"}), 503
 
 @app.route('/api/billings', defaults={'path': ''}, methods=['GET'])
@@ -101,25 +95,22 @@ def proxy_billing(path):
     if auth_error:
         return auth_error
     
-    url = f"{BILLING_SERVICE_URL}/api/billings"
+    url = f"{Config.BILLING_SERVICE_URL}/api/billings"
     if path:
         url += f"/{path}"
     
     try:
-        headers = {'Content-Type': 'application/json'}
+        response = requests.get(
+            url,
+            headers={'Content-Type': 'application/json'},
+            params=dict(request.args),
+            timeout=10
+        )
         
-        if request.method == 'GET':
-            response = requests.get(url, headers=headers, params=request.args)
-        elif request.method == 'POST':
-            response = requests.post(url, headers=headers, json=request.get_json())
-        elif request.method == 'PUT':
-            response = requests.put(url, headers=headers, json=request.get_json())
-        elif request.method == 'DELETE':
-            response = requests.delete(url, headers=headers)
+        return response.content, response.status_code, {'Content-Type': 'application/json'}
         
-        return jsonify(response.json()), response.status_code
-    except requests.exceptions.RequestException as e:
-        return jsonify({"success": False, "message": "Account service unavailable"}), 503
+    except requests.exceptions.RequestException:
+        return jsonify({"success": False, "message": "Billing service unavailable"}), 503
 
 @app.route('/')
 def root():
@@ -130,53 +121,54 @@ def root():
     })
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return '', 204
-
-
 @app.route('/api/register', methods=['POST'])
 def register():
-    data = request.get_json()
-    email, password = data.get('email'), data.get('password')
-    if not email or not password:
-        return jsonify({"success": False, "message": "Email or password missing"}), 400
-
-    conn = get_db()
-    if not conn:
-        return jsonify({"success": False, "message": "DB connection failed"}), 500
+    url = f"{Config.USERS_SERVICE_URL}/api/users"
 
     try:
-        conn.execute('INSERT INTO users (username, password) VALUES (?, ?)',
-                     (email, generate_password_hash(password)))
-        conn.commit()
-        return jsonify({"success": True}), 200
-    except sqlite3.IntegrityError:
-        return jsonify({"success": False, "message": "Username already exists"}), 409
-    finally:
-        conn.close()
+        response = requests.post(
+            url,
+            headers={'Content-Type': 'application/json'},
+            json=request.get_json(),
+            timeout=10
+        )
 
+        return response.content, response.status_code, {'Content-Type': 'application/json'}
+        
+    except requests.exceptions.RequestException:
+        return jsonify({"success": False, "message": "Service unavailable"}), 503
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    email, password = data.get('email'), data.get('password')
-    if not email or not password:
-        return jsonify({"success": False, "message": "Email or password missing"}), 400
+    url = f"{Config.USERS_SERVICE_URL}/api/users"
+    json_data = request.get_json()
 
-    conn = get_db()
-    if not conn:
-        return jsonify({"success": False, "message": "DB connection failed"}), 500
+    email = json_data.get('email')
+    password = json_data.get('password')
 
-    user = conn.execute('SELECT * FROM users WHERE username = ?', (email,)).fetchone()
-    conn.close()
+    try:
+        response = requests.get(
+            url,
+            headers={'Content-Type': 'application/json'},
+            params=dict(email=email, password=password),
+            timeout=10
+        )
 
-    if user and check_password_hash(user['password'], password):
-        session.clear()
-        session.update(user_id=user['id'], username=user['username'], session_token=str(uuid.uuid4()))
-        return jsonify({"success": True, "data": dict(user) }), 200
+        response.encoding = 'utf-8'
 
-    return jsonify({"success": False, "message": "Invalid credentials"}), 401
+        if response.status_code == 200:
+            response_data = response.json()
+            user = response_data.get('data')
+            session.clear()
+            session.update(user_id=user['id'], session_token=str(uuid.uuid4()))
+
+            return jsonify(response_data), 200
+
+        else:
+            return jsonify({"success": False, "message": "Invalid credentials"}), 401
+        
+    except requests.exceptions.RequestException:
+        return jsonify({"success": False, "message": "Service unavailable"}), 503
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -186,23 +178,26 @@ def logout():
 
 @app.route('/api/me', methods=['GET'])
 def me():
-    if 'user_id' not in session:
-        return jsonify({"success": False, "message": "Unauthorized"}), 401
+    auth_error = require_auth()
+    if auth_error:
+        return auth_error
 
-    conn = get_db()
-    if not conn:
-        return jsonify({"success": False, "message": "DB connection failed"}), 500
-
-    user = conn.execute('SELECT id, username FROM users WHERE id = ?', (session['user_id'],)).fetchone()
-    conn.close()
-
-    if not user:
-        return jsonify({"success": False, "message": "Unauthorized"}), 401
-
-    return jsonify({
-        "success": True,
-        "data": dict(user)
-    })
+    url = f"{Config.USERS_SERVICE_URL}/api/users"
+    user_id = session.get('user_id')
+    if user_id:
+        url += f"/{user_id}"
+    
+    try:
+        response = requests.get(
+            url,
+            headers={'Content-Type': 'application/json'},
+            timeout=10
+        )
+        
+        return response.content, response.status_code, {'Content-Type': 'application/json'}
+        
+    except requests.exceptions.RequestException:
+        return jsonify({"success": False, "message": "Service unavailable"}), 503
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host=Config.HOST, port=Config.PORT)

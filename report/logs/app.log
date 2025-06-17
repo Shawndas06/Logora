@@ -1,0 +1,39 @@
+[2025-06-17 03:23:40] INFO [app:18] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 03:23:40] INFO [app:41] [None] [None None] [None] - Report Service application created successfully
+[2025-06-17 03:24:10] INFO [app:82] [4862e206] [GET http://127.0.0.1:5000/] [127.0.0.1] - Request started - GET /
+[2025-06-17 03:24:10] WARNING [app:31] [4862e206] [GET http://127.0.0.1:5000/] [127.0.0.1] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:24:10] INFO [app:89] [4862e206] [GET http://127.0.0.1:5000/] [127.0.0.1] - Request completed - GET / - Status: 404 - Size: 49 bytes
+[2025-06-17 03:24:10] INFO [app:82] [0dfec2a7] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - Request started - GET /favicon.ico
+[2025-06-17 03:24:10] WARNING [app:31] [0dfec2a7] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:24:10] INFO [app:89] [0dfec2a7] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - Request completed - GET /favicon.ico - Status: 404 - Size: 49 bytes
+[2025-06-17 03:24:20] INFO [app:82] [40507cfb] [GET http://127.0.0.1:5000/] [127.0.0.1] - Request started - GET /
+[2025-06-17 03:24:20] WARNING [app:31] [40507cfb] [GET http://127.0.0.1:5000/] [127.0.0.1] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:24:20] INFO [app:89] [40507cfb] [GET http://127.0.0.1:5000/] [127.0.0.1] - Request completed - GET / - Status: 404 - Size: 49 bytes
+[2025-06-17 03:24:21] INFO [app:82] [9eebbdda] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - Request started - GET /favicon.ico
+[2025-06-17 03:24:21] WARNING [app:31] [9eebbdda] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:24:21] INFO [app:89] [9eebbdda] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - Request completed - GET /favicon.ico - Status: 404 - Size: 49 bytes
+[2025-06-17 03:24:24] INFO [app:82] [3218ae5c] [GET http://192.168.0.12:5000/] [192.168.0.12] - Request started - GET /
+[2025-06-17 03:24:24] WARNING [app:31] [3218ae5c] [GET http://192.168.0.12:5000/] [192.168.0.12] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:24:24] INFO [app:89] [3218ae5c] [GET http://192.168.0.12:5000/] [192.168.0.12] - Request completed - GET / - Status: 404 - Size: 49 bytes
+[2025-06-17 03:24:24] INFO [app:82] [65a74eb8] [GET http://192.168.0.12:5000/favicon.ico] [192.168.0.12] - Request started - GET /favicon.ico
+[2025-06-17 03:24:24] WARNING [app:31] [65a74eb8] [GET http://192.168.0.12:5000/favicon.ico] [192.168.0.12] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:24:24] INFO [app:89] [65a74eb8] [GET http://192.168.0.12:5000/favicon.ico] [192.168.0.12] - Request completed - GET /favicon.ico - Status: 404 - Size: 49 bytes
+[2025-06-17 03:25:05] INFO [app:18] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 03:25:05] INFO [app:41] [None] [None None] [None] - Report Service application created successfully
+[2025-06-17 03:25:12] INFO [app:82] [2cf3953e] [GET http://192.168.0.12:5000/] [192.168.0.12] - Request started - GET /
+[2025-06-17 03:25:12] WARNING [app:31] [2cf3953e] [GET http://192.168.0.12:5000/] [192.168.0.12] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:25:12] INFO [app:89] [2cf3953e] [GET http://192.168.0.12:5000/] [192.168.0.12] - Request completed - GET / - Status: 404 - Size: 49 bytes
+[2025-06-17 03:25:13] INFO [app:82] [1b05008d] [GET http://192.168.0.12:5000/favicon.ico] [192.168.0.12] - Request started - GET /favicon.ico
+[2025-06-17 03:25:13] WARNING [app:31] [1b05008d] [GET http://192.168.0.12:5000/favicon.ico] [192.168.0.12] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:25:13] INFO [app:89] [1b05008d] [GET http://192.168.0.12:5000/favicon.ico] [192.168.0.12] - Request completed - GET /favicon.ico - Status: 404 - Size: 49 bytes
+[2025-06-17 03:26:43] INFO [app:18] [None] [None None] [None] - Database initialized successfully
+[2025-06-17 03:26:43] INFO [app:41] [None] [None None] [None] - Report Service application created successfully
+[2025-06-17 03:26:50] INFO [app:82] [75174d25] [GET http://127.0.0.1:5000/] [127.0.0.1] - Request started - GET /
+[2025-06-17 03:26:50] INFO [app:89] [75174d25] [GET http://127.0.0.1:5000/] [127.0.0.1] - Request completed - GET / - Status: 200 - Size: 153 bytes
+[2025-06-17 03:26:51] INFO [app:82] [286ffb95] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - Request started - GET /favicon.ico
+[2025-06-17 03:26:51] WARNING [app:31] [286ffb95] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - 404 error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-06-17 03:26:51] INFO [app:89] [286ffb95] [GET http://127.0.0.1:5000/favicon.ico] [127.0.0.1] - Request completed - GET /favicon.ico - Status: 404 - Size: 49 bytes
+[2025-06-17 03:27:21] INFO [app:82] [6a94714b] [GET http://192.168.0.12:5000/] [192.168.0.12] - Request started - GET /
+[2025-06-17 03:27:21] INFO [app:89] [6a94714b] [GET http://192.168.0.12:5000/] [192.168.0.12] - Request completed - GET / - Status: 200 - Size: 153 bytes
+[2025-06-17 03:27:48] INFO [app:82] [f5a650b7] [GET http://127.0.0.1:5000/] [127.0.0.1] - Request started - GET /
+[2025-06-17 03:27:48] INFO [app:89] [f5a650b7] [GET http://127.0.0.1:5000/] [127.0.0.1] - Request completed - GET / - Status: 200 - Size: 153 bytes

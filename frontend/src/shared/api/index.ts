@@ -8,6 +8,11 @@ type Success<D = undefined> = {
 export type User = {
   id: number;
   username: string;
+  email: string
+  is_admin: boolean;
+  name: string;
+  sex: 1 | 0;
+  description: string;
 };
 
 export type Account = {
@@ -55,10 +60,10 @@ export type Billing = {
 
 export type Payment = {
   id: number;
-  accountId: number;
-  billingIds: number[];
+  account_id: number;
+  billing_ids: number[];
   amount: number;
-  createdAt: string;
+  created_at: string;
   status: 'processing' | 'completed' | 'error';
 };
 
@@ -253,14 +258,14 @@ export const authApi = {
     return response.json();
   },
 
-  signUp: async (email: string, password: string): Promise<Success> => {
+  signUp: async (email: string, password: string, name: string, sex: number, description: string): Promise<Success> => {
     const response = await fetch(`${BACKEND_URL}/api/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, name, sex, description }),
     });
 
     if (!response.ok) {
@@ -420,7 +425,7 @@ export const billingsApi = {
 
 export const paymentApi = {
   pay: async (
-    account: number,
+    accountId: number,
     billingIds: number[],
     amount: number,
     creditCard?: { cardNumber: string }
@@ -431,7 +436,7 @@ export const paymentApi = {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ account, billingIds, amount, creditCard }),
+      body: JSON.stringify({ account_id: accountId, billing_ids: billingIds, amount, creditCard }),
     });
 
     if (!response.ok) {
@@ -485,3 +490,20 @@ export const reportsApi = {
     return { success: true, data: undefined };
   },
 };
+
+export const tasksApi = {
+  getUserTasks: async (userId: number): Promise<Success> => {
+    const response = await fetch(`http://localhost:3011/api/tasks?userId=${userId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch tasks');
+    }
+
+    return response.json();
+  }
+}

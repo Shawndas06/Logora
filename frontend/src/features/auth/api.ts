@@ -32,8 +32,8 @@ export const useSignInMutation = () => {
 
 export const useSignUpMutation = () => {
   const signUpMutation = useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      authApi.signUp(email, password),
+    mutationFn: ({ email, password, description, sex, name }: { email: string; password: string, description: string, sex: number, name: string }) =>
+      authApi.signUp(email, password, name, sex, description),
     onSuccess: () => {
       notifications.show({
         title: 'Регистрация успешна',

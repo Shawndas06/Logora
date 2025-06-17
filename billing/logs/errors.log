@@ -1,0 +1,60 @@
+[2025-06-16 16:06:09] ERROR [app:1414] [83883920] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Exception on /api/billings [GET]
+Traceback (most recent call last):
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/dzhabrail/Desktop/Logora 2/billing_new/routes/billing_routes.py", line 9, in get_billing
+    int({})
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
+[2025-06-16 16:06:09] ERROR [app:38] [83883920] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - 500 error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+Traceback (most recent call last):
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/dzhabrail/Desktop/Logora 2/billing_new/routes/billing_routes.py", line 9, in get_billing
+    int({})
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
+[2025-06-16 16:07:08] ERROR [app:1414] [aa439d73] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - Exception on /api/billings [GET]
+Traceback (most recent call last):
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/dzhabrail/Desktop/Logora 2/billing_new/routes/billing_routes.py", line 9, in get_billing
+    int({})
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'
+[2025-06-16 16:07:08] ERROR [app:38] [aa439d73] [GET http://127.0.0.1:3005/api/billings?account=2] [127.0.0.1] - 500 error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+Traceback (most recent call last):
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/dzhabrail/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/dzhabrail/Desktop/Logora 2/billing_new/routes/billing_routes.py", line 9, in get_billing
+    int({})
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'dict'

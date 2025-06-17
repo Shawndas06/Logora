@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   frontend:
     build:
@@ -11,11 +13,11 @@ services:
       - NODE_ENV=production
     restart: unless-stopped
     healthcheck:
-        test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
-        interval: 30s
-        timeout: 10s
-        retries: 3
-        start_period: 40s
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     depends_on:
       - api
 
@@ -26,15 +28,21 @@ services:
       - "3005:5000"
     environment:
       - SERVICE_NAME=api
+      # Исправленные URL сервисов (используем имена сервисов из docker-compose)
       - ACCOUNT_SERVICE_URL=http://account:5000
       - BILLING_SERVICE_URL=http://billing:5000
       - PAYMENT_SERVICE_URL=http://payment:5000
       - REPORT_SERVICE_URL=http://report:5000
     depends_on:
-      - billing
-      - payment
-      - report
-      - account
+      billing:
+        condition: service_started
+      payment:
+        condition: service_started
+      report:
+        condition: service_started
+      account:
+        condition: service_started
+    restart: unless-stopped
 
   billing:
     build: ./billing
@@ -43,22 +51,47 @@ services:
       - "5001:5000"
     environment:
       - SERVICE_NAME=billing
-
-  payment:
-    build: ./payment
-    container_name: payment_service
-    ports:
-      - "5002:5000"
-    environment:
-      - SERVICE_NAME=payment
+    restart: unless-stopped
+    healthcheck:
+      test:
+        ["CMD", "curl", "-f", "http://localhost:5000/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   report:
     build: ./report
     container_name: report_service
     ports:
-      - "5003:5000"
+      - "5002:5000"
     environment:
       - SERVICE_NAME=report
+    restart: unless-stopped
+    healthcheck:
+      test:
+        ["CMD", "curl", "-f", "http://localhost:5000/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  payment:
+    build: ./payment
+    container_name: payment_service
+    ports:
+      - "5003:5000" # Внешний порт 5003, внутренний 5000
+    environment:
+      - SERVICE_NAME=payment
+      - BILLING_SERVICE_URL=http://billing:5000
+    restart: unless-stopped
+    healthcheck:
+      test:
+        ["CMD", "curl", "-f", "http://localhost:5000/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   account:
     build: ./accounts
@@ -67,3 +100,48 @@ services:
       - "5004:5000"
     environment:
       - SERVICE_NAME=account
+    restart: unless-stopped
+    healthcheck:
+      test:
+        ["CMD", "curl", "-f", "http://localhost:5000/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  tasks:
+    build: ./tasks
+    container_name: tasks_service
+    ports:
+      - "5005:5000"
+    environment:
+      - SERVICE_NAME=account
+    restart: unless-stopped
+    healthcheck:
+      test:
+        ["CMD", "curl", "-f", "http://localhost:5000/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  users:
+    build: ./users
+    container_name: users_service
+    ports:
+      - "5006:5000"
+    environment:
+      - SERVICE_NAME=users
+    restart: unless-stopped
+    healthcheck:
+      test:
+        ["CMD", "curl", "-f", "http://localhost:5000/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Добавляем сеть для лучшей изоляции
+networks:
+  default:
+    name: logora_network
